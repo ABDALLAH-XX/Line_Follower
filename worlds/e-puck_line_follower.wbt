@@ -1,0 +1,45 @@
+#VRML_SIM R2025a utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "../protos/E-puck.proto"
+
+WorldInfo {
+  basicTimeStep 16
+}
+Viewpoint {
+  orientation -0.49924558790251994 0.4967561725429478 0.7099205223124264 1.9116074636632892
+  position 0.4108172161112752 -2.0213919482115212 5.208593032830987
+}
+TexturedBackground {
+  luminosity 2
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  floorSize 2 2
+  floorTileSize 2 2
+  floorAppearance PBRAppearance {
+    baseColorMap ImageTexture {
+      url [
+        "race1.png"
+      ]
+    }
+    roughness 1
+    metalness 0
+  }
+}
+E-puck {
+  translation 0.934092 -0.906573 -3.19802e-05
+  rotation -0.00014136450529630916 -0.00014160533561332443 0.9999999799820025 -3.141592653589793
+  controller "EpuckLineFollower"
+  camera_width 320
+  camera_height 240
+  camera_antiAliasing TRUE
+  camera_rotation 0 1 0 0.2
+  turretSlot [
+    GPS {
+    }
+  ]
+}

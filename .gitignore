@@ -1,0 +1,39 @@
+# 1. Ignore everything by default
+/*
+!.gitignore
+!README.md
+
+# 2. Allow specific main folders
+!controllers/
+!worlds/
+!libraries/
+!plugins/
+!protos/
+!e-puck_line_follower.mp4
+
+
+# 3. CONTROLLERS: Only keep EPuckLineFollower sources
+controllers/*
+!controllers/EpuckLineFollower/
+
+# 4. WORLDS: Only keep the world file and 4 specific images
+worlds/*
+!worlds/e-puck_line_follower.wbt
+!worlds/e-puck_line_follower.wbproj
+!worlds/race1.png
+!worlds/map1.png
+!worlds/map2.png
+!worlds/map3.jpg
+!worlds/oval_line.png
+
+# 5. LIBRARIES, PLUGINS, PROTOS: Keep everything inside
+!libraries/**
+!plugins/**
+!protos/**
+
+# 6. Safety Cleanup: Ignore all build artifacts everywhere
+**/build/
+**/release/
+*.o
+*.d
+*.exe
