@@ -29,5 +29,5 @@ A high-speed line follower simulation using the e-puck robot in Webots. This pro
 
 ![Line Follower Demo](demo.gif)
 <p align="center">
-  <img src="e-puck-line-follower.gif" width="600"/>
+  <img src="Line_Follower/e-puck-line-follower.gif" width="600"/>
 </p>
