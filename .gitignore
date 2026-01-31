@@ -9,7 +9,7 @@
 !libraries/
 !plugins/
 !protos/
-!e-puck_line_follower.mp4
+!e-puck_line_follower.gif
 
 
 # 3. CONTROLLERS: Only keep EPuckLineFollower sources
