@@ -42,3 +42,5 @@ The project includes a Python-based analytics suite that processes simulation da
 2. Run the analysis script:
    ```bash
    python analysis/analysis.py
+
+![Robot Demo](e-puck_line_follower.gif)

@@ -79,7 +79,8 @@ int main(int argc, char **argv) {
   double ise = 0.0;
   
   // save performance to evaluate corrections
-  std::ofstream logFile("pid_performance.csv"); 
+  
+  std::ofstream logFile("../../analysis/pidtest2_performance.csv"); 
   logFile << "Time,Error,LeftSpeed,RightSpeed,baseSpeed,IAE,ISE\n";
   
 
