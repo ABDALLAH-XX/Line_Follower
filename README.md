@@ -43,4 +43,9 @@ The project includes a Python-based analytics suite that processes simulation da
    ```bash
    python analysis/analysis.py
 
-![Robot Demo](e-puck_line_follower.gif)
+## 🏎️ Performance Demo
+The GIF below demonstrates the robot maintaining a high-speed trajectory of **5.8 rad/s**. Observe the stability of the PID controller as it dampens oscillations during rapid direction changes.
+
+<p align="center">
+  <img src="e-puck_line_follower.gif" width="750" alt="High-Speed Robot Navigation Demo"/>
+</p>
