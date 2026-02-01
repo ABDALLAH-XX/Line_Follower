@@ -1,31 +1,44 @@
-# E-Puck Line Follower (Webots & OpenCV)
+# 🏎️ High-Speed E-Puck Line Follower (Webots & OpenCV)
 
-A high-speed line follower simulation using the e-puck robot in Webots. This project implements a **PID controller** and leverages **OpenCV** for advanced image processing to detect the track under various conditions.
+A high-performance autonomous line-following system using the **e-puck** robot. This project features a precision-tuned **PID controller** and leverages **OpenCV** for real-time vision processing, achieving stable navigation at 92% of the robot's hardware speed limit.
 
-## 🚀 Features
-- **OpenCV Integration:** Real-time camera processing for line detection.
-- **PID Control:** Smooth steering and speed management (tuned for 5.8 rad/s).
-- **Custom Worlds:** Includes specific maps (`race1`, `map1`, etc.) for testing performance.
+## 🚀 Performance Benchmarks (Final Results)
+After extensive optimization of the PID coefficients ($K_p=0.16, K_d=0.001, K_i=0.0001$), the system achieved the following results on the standard test track:
+
+| Metric | Result | Description |
+| :--- | :--- | :--- |
+| **Top Base Speed** | **5.8 rad/s** | Sustained high-speed navigation |
+| **Lap Time** | **110.50 s** | Total traversal time |
+| **Reliability** | **100.00%** | Zero tracking errors exceeding 100px |
+| **Avg. Settling Time**| **0.853 s** | Recovery time after sharp turns |
+| **Precision (IAE)** | **692.45** | Integral of Absolute Error (Lower is better) |
+
+## 🛠️ Technical Implementation
+### 👁️ Computer Vision
+The robot captures a camera feed and uses **OpenCV** to:
+1.  Convert the frame to Grayscale.
+2.  Apply Thresholding to isolate the track.
+3.  Calculate the **Line Centroid** using Image Moments ($m_{00}$ and $m_{10}$), providing a robust error signal for the controller.
+
+### 🧠 PID Control & Stability
+The controller implements a full PID loop with a specific optimization:
+- **Zero-Crossing Integral Reset:** To prevent "hunting" and oscillations on straightaways, the integral term is reset whenever the error signal crosses zero. This significantly reduces the **ISE (Integral of Squared Error)** compared to standard P-controllers.
+
+
 
 ## 📁 Project Structure
-- `controllers/EPuckLineFollower/`: Core C++ logic and Makefile.
-- `worlds/`: Simulation environments and track textures.
-- `protos/` & `plugins/`: Custom robot definitions and physics.
+- `controllers/main_controller/`: Core C++ logic, Makefile, and performance logs (`.csv`).
+- `analysis/`: Python data pipeline (`analysis.py`) for generating performance reports.
+- `worlds/`: Simulation environments and high-resolution track textures.
+- `protos/` & `plugins/`: Robot definitions and physics plugins.
 
-## 🛠️ Setup
-1. **Webots:** Ensure you have Webots R2023b or later installed.
-2. **OpenCV:** You must have OpenCV installed on your system.
-   - *Linux:* `sudo apt-get install libopencv-dev`
-3. **Compilation:**
-   - Open the controller folder in a terminal.
-   - Run `make` to compile the C++ code.
+## 📊 Analytics Pipeline
+The project includes a Python-based analytics suite that processes simulation data to generate professional performance reports.
 
-## 🎮 How to Run
-1. Open Webots.
-2. Load the world file: `worlds/e-puck_line_follower.wbt`.
-3. Press the **Play** button to start the simulation.
 
-## 🎥 Demo
-<p align="center">
-  <img src="e-puck_line_follower.gif" width="600"/>
-</p>
+
+**To generate a report:**
+1. Ensure `pandas`, `matplotlib`, and `numpy` are installed.
+2. Run the analysis script:
+   ```bash
+   python analysis/analysis.py

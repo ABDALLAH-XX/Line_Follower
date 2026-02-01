@@ -14,6 +14,8 @@
 #include <webots/PositionSensor.hpp>
 #include <iostream>
 #include <string>
+#include <fstream>
+#include <cmath>
 #include <opencv2/opencv.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/core.hpp>
@@ -66,16 +68,26 @@ int main(int argc, char **argv) {
   double lastDistance = 0.0;
   
   double baseSpeed = 5.8;
-  double kp = 0.015;
-  double kd = 0.03;
-  double ki = 0.005;
+  double kp = 0.16;
+  double kd = 0.001;
+  double ki = 0.0001;
   
   double lastError = 0.0;
   double integral = 0.0;
+  
+  double iae = 0.0;
+  double ise = 0.0;
+  
+  // save performance to evaluate corrections
+  std::ofstream logFile("pid_performance.csv"); 
+  logFile << "Time,Error,LeftSpeed,RightSpeed,baseSpeed,IAE,ISE\n";
+  
 
   
   while (robot->step(TIME_STEP) != -1) {
     // Read the sensors:      
+    
+    double currentTime = robot->getTime() - startTime;
 
     double currentDist = wheelRadius * ((leftEncoder->getValue() - initialLeftPos) + 
                                     (rightEncoder->getValue() - initialRightPos)) / 2.0;
@@ -104,20 +116,24 @@ int main(int argc, char **argv) {
     // Visualization
     cv::cvtColor(img, visuFrame, cv::COLOR_GRAY2BGR);
     
+    double leftSpeed = 0.0;
+    double rightSpeed = 0.0;
+    double error = 0.0;
+    
     if (m.m00 > 0) {
       int lineCenter = m.m10 / m.m00;
       int imageCenter = width / 2;
       
       // PID command is used. we can also use P, PD and PI controllers
       
-      int error = lineCenter - imageCenter;
-      
-     
+      error = (double)lineCenter - imageCenter;
+   
+       
       double derivative = error - lastError;
       integral += error;
       
       
-      if ((error > 0 && lastError < 0) || (error < 0 && lastError > 0) || error == 0) {
+      if (error * lastError <= 0) {
             integral = 0;
       }
       
@@ -127,17 +143,12 @@ int main(int argc, char **argv) {
       double pidCorrection = (kp * error) + (ki * integral) + (kd * derivative);
       
       
-      double leftSpeed = baseSpeed + pidCorrection;
-      double rightSpeed = baseSpeed - pidCorrection;
+      leftSpeed = baseSpeed + pidCorrection;
+      rightSpeed = baseSpeed - pidCorrection;
       
-      if (leftSpeed > MAX_SPEED) leftSpeed = MAX_SPEED;
-      if (rightSpeed > MAX_SPEED) rightSpeed = MAX_SPEED;
-      if (leftSpeed < -MAX_SPEED) leftSpeed = -MAX_SPEED;
-      if (rightSpeed < -MAX_SPEED) rightSpeed = -MAX_SPEED;
-      
-      leftMotor->setVelocity(leftSpeed);
-      rightMotor->setVelocity(rightSpeed);
-      
+      double dt = (double) TIME_STEP / 1000.0;
+      iae += std::abs(error) * dt;
+      ise += error * error * dt;
       lastError = error;
       
       // draw the center line and the center detected
@@ -152,21 +163,33 @@ int main(int argc, char **argv) {
                    cv::MARKER_CROSS,             
                    10,                           
                    2);
-      if (error> 2.0 || error < -2.0)
-        std::cout << "Line shift : " << error << std::endl;
+      /*if (error> 2.0 || error < -2.0)
+        std::cout << "Line shift : " << error << std::endl;*/
       
    
     }
     else {
       std::cout << "Line lost. Searching..." << std::endl;
-      leftMotor->setVelocity(1.0);
-      rightMotor->setVelocity(-1.0);
+      leftSpeed = 1.0;
+      rightSpeed = -1.0;
     }
-
     
-    // Chronometer management
-    double currentTime = robot->getTime() - startTime;
+    leftSpeed = std::max(-MAX_SPEED, std::min(MAX_SPEED, leftSpeed));
+    rightSpeed = std::max(-MAX_SPEED, std::min(MAX_SPEED, rightSpeed));
+      
+    leftMotor->setVelocity(leftSpeed);
+    rightMotor->setVelocity(rightSpeed);
     
+    logFile << currentTime << "," << error << "," << leftSpeed << "," 
+                << rightSpeed << "," << baseSpeed << "," << iae << "," << ise << "\n";
+    
+    
+    if (currentDist > 12.05) { 
+    std::cout << "Finished ! IAE: " << iae << " | ISE: " << ise << std::endl;
+    leftMotor->setVelocity(0.0);
+    rightMotor->setVelocity(0.0);
+    break; 
+    }
     // Display time on the opencv image
     std::string timeStr = "Time: " + std::to_string(currentTime).substr(0, 4) + "s";
     cv::putText(visuFrame, timeStr, cv::Point(10, 20), 
@@ -186,9 +209,11 @@ int main(int argc, char **argv) {
     cv::waitKey(1);
 
   };
-
+  
+  logFile.close();
+  cv::destroyAllWindows();
   // Enter here exit cleanup code.
-
   delete robot;
   return 0;
 }
+

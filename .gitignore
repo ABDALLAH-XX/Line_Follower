@@ -9,6 +9,7 @@
 !libraries/
 !plugins/
 !protos/
+!analysis/
 !e-puck_line_follower.gif
 
 
@@ -25,6 +26,11 @@ worlds/*
 !worlds/map2.png
 !worlds/map3.jpg
 !worlds/oval_line.png
+
+# 5. ANALYSIS: Keep 2 specific analysis files
+analysis/*
+!analysis/analysis.py
+!analysis/pid_performance_report.png
 
 # 5. LIBRARIES, PLUGINS, PROTOS: Keep everything inside
 !libraries/**
