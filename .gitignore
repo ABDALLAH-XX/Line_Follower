@@ -30,7 +30,7 @@ worlds/*
 # 5. ANALYSIS: Keep 2 specific analysis files
 analysis/*
 !analysis/analysis.py
-!analysis/pid_performance_report.png
+!analysis/pid7_performance_report.png
 
 # 5. LIBRARIES, PLUGINS, PROTOS: Keep everything inside
 !libraries/**
