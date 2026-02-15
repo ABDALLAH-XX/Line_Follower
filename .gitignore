@@ -16,7 +16,7 @@
 
 # 3. CONTROLLERS: Only keep EPuckLineFollower sources
 controllers/*
-!controllers/EpuckLineFollower/
+!controllers/EPuckLineFollowerOOP/
 
 # 4. WORLDS: Only keep the world file and 4 specific images
 worlds/*
@@ -31,7 +31,7 @@ worlds/*
 # 5. ANALYSIS: Keep 2 specific analysis files
 analysis/*
 !analysis/analysis.py
-!analysis/pid7_performance_report.png
+!analysis/pidtest2_performance_report.png
 
 # 5. LIBRARIES, PLUGINS, PROTOS: Keep everything inside
 !libraries/**

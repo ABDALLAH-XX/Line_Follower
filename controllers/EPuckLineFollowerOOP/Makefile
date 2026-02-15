@@ -67,8 +67,8 @@
 
 
 # --- Nom de ton fichier source ---
-CXX_SOURCES = EpuckLineFollower.cpp
-#CXX_SOURCES = main.cpp PID.cpp LineDetector.cpp DataLogger.cpp
+#CXX_SOURCES = EpuckLineFollower.cpp
+CXX_SOURCES = EPuckLineFollowerOOP.cpp PID.cpp LineDetector.cpp DataLogger.cpp
 # --- Ajout manuel d'OpenCV (Solution robuste) ---
 # On ajoute les dossiers d'en-têtes
 INCLUDE += -I/usr/include/opencv4

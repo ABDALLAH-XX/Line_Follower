@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # 1. Configuration
-FILE_NAME = 'pid7_performance.csv'
+FILE_NAME = 'pidtest2_performance.csv'
 STABILITY_THRESHOLD = 10  # Tolerance band for Settling Time (pixels)
 
 # 2. Data Loading

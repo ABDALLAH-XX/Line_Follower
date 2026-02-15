@@ -9,21 +9,22 @@ WorldInfo {
   basicTimeStep 16
 }
 Viewpoint {
-  orientation -0.49924558790251994 0.4967561725429478 0.7099205223124264 1.9116074636632892
-  position 0.4108172161112752 -2.0213919482115212 5.208593032830987
+  orientation 0.01644222133437763 0.9975394759166338 -0.06815164961729613 0.4744232906279075
+  position -2.7236051656834928 -0.2606241841593652 1.5399602024890384
 }
 TexturedBackground {
-  luminosity 2
 }
 TexturedBackgroundLight {
 }
 RectangleArena {
+  rotation 0 0 1 -1.5708
   floorSize 2 2
   floorTileSize 2 2
   floorAppearance PBRAppearance {
     baseColorMap ImageTexture {
       url [
         "race1.png"
+        ""
       ]
     }
     roughness 1
@@ -31,15 +32,35 @@ RectangleArena {
   }
 }
 E-puck {
-  translation 0.934092 -0.906573 -3.19802e-05
-  rotation -0.00014136450529630916 -0.00014160533561332443 0.9999999799820025 -3.141592653589793
-  controller "EpuckLineFollower"
+  translation -8.010154309593401e-05 -1.105341216514505e-06 -3.1980997893728616e-05
+  rotation 2.3251668522127975e-08 -2.177260165565785e-08 0.9999999999999994 1.5707999993251984
+  controller "CommunicationTest"
+  supervisor TRUE
   camera_width 320
   camera_height 240
   camera_antiAliasing TRUE
   camera_rotation 0 1 0 0.2
   turretSlot [
+    Compass {
+    }
     GPS {
+    }
+  ]
+}
+Solid {
+  translation 0.0355337 0.608931 6.66134e-16
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 1 0 0
+        roughness 1
+        metalness 0
+      }
+      geometry Cylinder {
+        bottom FALSE
+        height 0.2
+        radius 0.1
+      }
     }
   ]
 }

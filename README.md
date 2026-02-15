@@ -1,51 +1,52 @@
 # 🏎️ High-Speed E-Puck Line Follower (Webots & OpenCV)
 
-A high-performance autonomous line-following system using the **e-puck** robot. This project features a precision-tuned **PID controller** and leverages **OpenCV** for real-time vision processing, achieving stable navigation at 92% of the robot's hardware speed limit.
+A high-performance autonomous line-following system using the **e-puck** robot. This version features a **Modular OOP Architecture**, a precision-tuned **PID controller**, and **OpenCV** vision processing, achieving stable navigation at high speeds.
 
-## 🚀 Performance Benchmarks (Final Results)
-After extensive optimization of the PID coefficients ($K_p=0.16, K_d=0.001, K_i=0.0001$), the system achieved the following results on the standard test track:
+## 🏗️ Architecture & OOP Implementation
+The system has been refactored from a monolithic script into specialized C++ classes to ensure modularity and scalability:
+
+* **EPuckLineFollowerOOP (Main):** Orchestrates the robot's lifecycle and sensor-actuator loops.
+* **LineDetector:** Encapsulates OpenCV logic for grayscale thresholding and centroid calculation ($m_{00}, m_{10}$).
+* **PID Controller:** Handles the control law logic, including the **Zero-Crossing Integral Reset** optimization.
+* **DataLogger:** Manages real-time telemetry export to CSV for post-simulation analysis.
+* **RobotState:** A lightweight structure for synchronized sensor data and error signals.
+
+## 🚀 Performance Benchmarks (Latest Analysis)
+Based on the `pidtest2_performance.csv` log, the system shows high stability even at 5.8 rad/s:
 
 | Metric | Result | Description |
 | :--- | :--- | :--- |
-| **Top Base Speed** | **5.8 rad/s** | Sustained high-speed navigation |
-| **Lap Time** | **110.50 s** | Total traversal time |
-| **Reliability** | **100.00%** | Zero tracking errors exceeding 100px |
-| **Avg. Settling Time**| **0.853 s** | Recovery time after sharp turns |
-| **Precision (IAE)** | **692.45** | Integral of Absolute Error (Lower is better) |
+| **Total Traversal Time** | **114.88 s** | Total time to complete the circuit |
+| **IAE (Accuracy)** | **696.62** | Integral of Absolute Error (Path following precision) |
+| **ISE (Stability)** | **12246.90** | Integral of Squared Error (Reflects large oscillations) |
+| **Reliability (>100px)** | **99.94%** | Success rate (only 2 peaks detected) |
+| **Avg. Settling Time** | **0.878 s** | Mean time to recover stability after a curve |
 
-## 🛠️ Technical Implementation
-### 👁️ Computer Vision
-The robot captures a camera feed and uses **OpenCV** to:
-1.  Convert the frame to Grayscale.
-2.  Apply Thresholding to isolate the track.
-3.  Calculate the **Line Centroid** using Image Moments ($m_{00}$ and $m_{10}$), providing a robust error signal for the controller.
+---
 
-### 🧠 PID Control & Stability
-The controller implements a full PID loop with a specific optimization:
-- **Zero-Crossing Integral Reset:** To prevent "hunting" and oscillations on straightaways, the integral term is reset whenever the error signal crosses zero. This significantly reduces the **ISE (Integral of Squared Error)** compared to standard P-controllers.
+## 🛠️ Technical Implementation & Insights
+
+### 🧠 The Perception-Actuation Gap
+A key observation in this project is that **the robot's physical center may not be perfectly aligned with the line**, even when the `LineDetector` correctly identifies the centroid in the image frame.
+* **Cause:** This "lag" is due to the camera's forward placement relative to the wheel axis (look-ahead distance) and the mechanical inertia during high-speed turns.
+* **Resolution:** The PID controller is tuned to prioritize stability over static alignment, using the error signal to predict the necessary angular velocity to maintain the trajectory despite this physical offset.
+
+
+
+### ⚡ PID Control with Zero-Crossing Reset
+To prevent "hunting" (oscillations) on straight segments, the integral term is reset whenever the error signal crosses zero. This maintains a low **ISE** and prevents the accumulation of error that leads to over-correction.
 
 
 
 ## 📁 Project Structure
-- `controllers/main_controller/`: Core C++ logic, Makefile, and performance logs (`.csv`).
-- `analysis/`: Python data pipeline (`analysis.py`) for generating performance reports.
-- `worlds/`: Simulation environments and high-resolution track textures.
-- `protos/` & `plugins/`: Robot definitions and physics plugins.
-
-## 📊 Analytics Pipeline
-The project includes a Python-based analytics suite that processes simulation data to generate professional performance reports.
-
-
-
-**To generate a report:**
-1. Ensure `pandas`, `matplotlib`, and `numpy` are installed.
-2. Run the analysis script:
-   ```bash
-   python analysis/analysis.py
+- `controllers/EPuckLineFollowerOOP/`:
+    - `LineDetector.hpp/cpp` & `PID.hpp/cpp`: Modular vision and control logic.
+    - `DataLogger.hpp/cpp`: CSV Telemetry system.
+    - `RobotState.hpp`: Data synchronization.
+    - `EPuckLineFollowerOOP.cpp`: Main entry point.
+- `analysis/`: Python pipeline for generating performance reports.
 
 ## 🏎️ Performance Demo
-The GIF below demonstrates the robot maintaining a high-speed trajectory of **5.8 rad/s**. Observe the stability of the PID controller as it dampens oscillations during rapid direction changes.
-
 <p align="center">
   <img src="e-puck_line_follower.gif" width="750" alt="High-Speed Robot Navigation Demo"/>
 </p>
