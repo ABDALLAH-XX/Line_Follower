@@ -9,21 +9,20 @@ WorldInfo {
   basicTimeStep 16
 }
 Viewpoint {
-  orientation 0.01644222133437763 0.9975394759166338 -0.06815164961729613 0.4744232906279075
-  position -2.7236051656834928 -0.2606241841593652 1.5399602024890384
+  orientation 0.005853213697568497 0.9998836221555507 -0.01408836521766784 0.7871315733775134
+  position -4.227719880354709 0.038851937080835876 3.8416174243168286
 }
 TexturedBackground {
 }
 TexturedBackgroundLight {
 }
 RectangleArena {
-  rotation 0 0 1 -1.5708
   floorSize 2 2
   floorTileSize 2 2
   floorAppearance PBRAppearance {
     baseColorMap ImageTexture {
       url [
-        "race1.png"
+        "map3.jpg"
         ""
       ]
     }
@@ -32,9 +31,9 @@ RectangleArena {
   }
 }
 E-puck {
-  translation -8.010154309593401e-05 -1.105341216514505e-06 -3.1980997893728616e-05
-  rotation 2.3251668522127975e-08 -2.177260165565785e-08 0.9999999999999994 1.5707999993251984
-  controller "CommunicationTest"
+  translation -0.635393 -0.769776 -3.19818e-05
+  rotation -6.181607400306947e-05 0.006654782304781548 -0.999977854780419 -0.018558961721346634
+  controller "Kalman"
   supervisor TRUE
   camera_width 320
   camera_height 240
@@ -44,23 +43,7 @@ E-puck {
     Compass {
     }
     GPS {
-    }
-  ]
-}
-Solid {
-  translation 0.0355337 0.608931 6.66134e-16
-  children [
-    Shape {
-      appearance PBRAppearance {
-        baseColor 1 0 0
-        roughness 1
-        metalness 0
-      }
-      geometry Cylinder {
-        bottom FALSE
-        height 0.2
-        radius 0.1
-      }
+      accuracy 0.05
     }
   ]
 }

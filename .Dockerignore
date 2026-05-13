@@ -1,0 +1,9 @@
+# Ne pas copier le dossier git dans l'image
+.git
+.gitignore
+
+# Ne pas copier les fichiers de build locaux (pour éviter les conflits d'architecture)
+**/*.o
+**/*.d
+**/EPuckLineFollowerOOP
+**/EpuckLineFollower

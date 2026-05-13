@@ -36,7 +36,27 @@ A key observation in this project is that **the robot's physical center may not 
 ### ⚡ PID Control with Zero-Crossing Reset
 To prevent "hunting" (oscillations) on straight segments, the integral term is reset whenever the error signal crosses zero. This maintains a low **ISE** and prevents the accumulation of error that leads to over-correction.
 
+## 🛰️ Advanced Localization & Sensor Fusion
+Beyond line following, the system implements a robust state estimator to track the robot's absolute trajectory ($X, Y, \theta$).
 
+### 🛠️ The Estimator Pipeline
+To mitigate GPS noise ($accuracy = 0.05m$) and Odometry drift, I implemented a **1st Order Complementary Filter** enhanced by **Runge-Kutta 4th Order (RK4) integration**:
+
+* **Prediction Step:** Uses wheel encoders and compass data to project the state forward.
+* **Correction Step:** Blends the prediction with GPS absolute coordinates using a tuned gain $\alpha = 0.98$.
+* **Mathematical Refinement:** The use of RK4 integration significantly reduces discretization errors compared to standard Euler methods during high-speed cornering.
+
+### 📊 Performance vs. Theoretical Limits (Cramér-Rao)
+To validate the filter's optimality, the error was compared against the **Cramér-Rao Lower Bound (CRLB)**, which defines the physical limit of precision given the sensor noise:
+
+| Metric | Value | Interpretation |
+| :--- | :--- | :--- |
+| **GPS Noise ($\sigma_{gps}$)** | **0.0503 m** | Matches Webots sensor specifications |
+| **Process Noise ($\sigma_{odo}$)** | **0.0464 m** | Intrinsic uncertainty of the kinematic model |
+| **Theoretical CRLB** | **0.0604 m** | Minimum reachable error (Steady State) |
+| **Final Filter RMSE** | **0.1255 m** | High efficiency (only 2x the physical limit) |
+
+> **Insight:** The residual error (gap between RMSE and CRLB) is primarily due to the "dynamic lag" during sharp turns in the star-shaped circuit, a known trade-off of static gain filters.
 
 ## 📁 Project Structure
 - `controllers/EPuckLineFollowerOOP/`:
