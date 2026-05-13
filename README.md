@@ -1,3 +1,5 @@
+![Build Status](https://github.com/TON_NOM_UTILISATEUR/Line_Follower/actions/workflows/ci.yml/badge.svg)
+
 # 🏎️ High-Speed E-Puck Line Follower (Webots & OpenCV)
 
 A high-performance autonomous line-following system using the **e-puck** robot. This version features a **Modular OOP Architecture**, a precision-tuned **PID controller**, and **OpenCV** vision processing, achieving stable navigation at high speeds.
