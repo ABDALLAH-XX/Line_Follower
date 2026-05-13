@@ -66,6 +66,25 @@ To validate the filter's optimality, the error was compared against the **Cramé
     - `EPuckLineFollowerOOP.cpp`: Main entry point.
 - `analysis/`: Python pipeline for generating performance reports.
 
+## 🐳 Docker Integration & Reproducible Builds
+To ensure a consistent development environment across different machines (Ubuntu, Debian, etc.), the project is containerized using Docker. This eliminates "it works on my machine" issues by freezing dependencies like OpenCV 4.x and Webots libraries.
+
+# Quick Start
+
+**1.** **Build the image :** 
+```bash
+docker build -t line-follower-dev .
+``` 
+
+**2.** **Compile the controller :** 
+The `Dockerfile` automatically triggers the `Makefile` inside the container to generate the `EPuckLineFollowerOOP` binary.
+
+
+# Key Benefits
+- **Isolation**: No need to install multiple OpenCV versions on your host OS.
+- **CI/CD Ready**: The image is used by GitHub Actions to automatically validate every `git push`.
+- **Lightweight:** Using the official cyberbotics/webots base image to keep the environment lean and performance-focused.
+
 ## 🏎️ Performance Demo
 <p align="center">
   <img src="e-puck_line_follower.gif" width="750" alt="High-Speed Robot Navigation Demo"/>

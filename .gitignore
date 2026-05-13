@@ -39,6 +39,9 @@ analysis/*
 !protos/**
 
 !Dockerfile
+!.Dockerignore
+
+!.github/
 
 # 6. Safety Cleanup: Ignore all build artifacts everywhere
 **/build/
