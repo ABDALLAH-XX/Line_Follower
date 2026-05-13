@@ -91,6 +91,20 @@ To validate the filter's optimality, the error was compared against the **Cramé
 
 > **Insight:** The residual error (gap between RMSE and CRLB) is primarily due to the "dynamic lag" during sharp turns in the star-shaped circuit, a known trade-off of static gain filters.
 
+### 📊 Performance & Trajectory Analysis
+
+To validate the estimator, we compare the filtered trajectory against raw measurements and theoretical limits.
+
+#### Trajectory Visualization
+The plot below demonstrates how the **RK2 Filter** (purple) smooths the noisy **GPS** data (cyan) while correcting the significant **Odometry drift** (red).
+
+![Robot Trajectory](analysis/robot_trajectory.png)
+
+#### Theoretical Optimality (Cramér-Rao)
+The following analysis compares the actual Root Mean Square Error (RMSE) against the **Cramér-Rao Lower Bound (CRLB)**. This proves the filter's efficiency relative to the physical noise limits of the sensors.
+
+![Cramér-Rao Analysis](analysis/cramer_rao.png)
+
 # Quick Start
 
 **1.** **Build the image :** 
