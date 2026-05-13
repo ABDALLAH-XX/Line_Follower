@@ -20,4 +20,4 @@ jobs:
 
       - name: Run Performance Analysis inside Docker
         # On lance python à l'intérieur du conteneur
-        run: docker run --rm line-follower-dev python3 analysis/generate_report.py
+        run: docker run --rm line-follower-dev python3 analysis/analysis.py
