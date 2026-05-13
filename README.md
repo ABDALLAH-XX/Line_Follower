@@ -1,4 +1,4 @@
-![Build Status](https://github.com/TON_NOM_UTILISATEUR/Line_Follower/actions/workflows/ci.yml/badge.svg)
+![Build Status](https://github.com/ABDALLAH-XX/Line_Follower/actions/workflows/ci.yml/badge.svg)
 
 # 🏎️ High-Speed E-Puck Line Follower (Webots & OpenCV)
 
