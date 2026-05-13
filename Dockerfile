@@ -7,6 +7,9 @@ RUN apt-get update && apt-get install -y \
     libopencv-dev \
     pkg-config \
     build-essential \
+    python3-pandas \
+    python3-numpy \
+    python3-matplotlib \
     && rm -rf /var/lib/apt/lists/*
 
 # Définition du répertoire de travail

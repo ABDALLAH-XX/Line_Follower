@@ -18,5 +18,6 @@ jobs:
       - name: Verify Executable
         run: docker run --rm line-follower-dev ls -l controllers/EPuckLineFollowerOOP/EPuckLineFollowerOOP
 
-      - name: Run Performance Analysis
-        run: python3 analysis/generate_report.py
+      - name: Run Performance Analysis inside Docker
+        # On lance python à l'intérieur du conteneur
+        run: docker run --rm line-follower-dev python3 analysis/generate_report.py
