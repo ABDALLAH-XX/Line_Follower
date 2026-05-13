@@ -17,6 +17,7 @@
 # 3. CONTROLLERS: Only keep EPuckLineFollower sources
 controllers/*
 !controllers/EPuckLineFollowerOOP/
+!controllers/Kalman/
 
 # 4. WORLDS: Only keep the world file and 4 specific images
 worlds/*
