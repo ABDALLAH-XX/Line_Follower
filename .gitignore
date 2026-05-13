@@ -33,6 +33,8 @@ worlds/*
 analysis/*
 !analysis/analysis.py
 !analysis/pidtest2_performance_report.png
+!analysis/robot_trajectory.png
+!analysis/cramer_rao.png
 
 # 5. LIBRARIES, PLUGINS, PROTOS: Keep everything inside
 !libraries/**

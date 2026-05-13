@@ -38,11 +38,42 @@ A key observation in this project is that **the robot's physical center may not 
 ### ⚡ PID Control with Zero-Crossing Reset
 To prevent "hunting" (oscillations) on straight segments, the integral term is reset whenever the error signal crosses zero. This maintains a low **ISE** and prevents the accumulation of error that leads to over-correction.
 
-## 🛰️ Advanced Localization & Sensor Fusion
+## 📁 Project Structure
+- `controllers/EPuckLineFollowerOOP/`:
+    - `LineDetector.hpp/cpp` & `PID.hpp/cpp`: Modular vision and control logic.
+    - `DataLogger.hpp/cpp`: CSV Telemetry system.
+    - `RobotState.hpp`: Data synchronization.
+    - `EPuckLineFollowerOOP.cpp`: Main entry point.
+- `analysis/`: Python pipeline for generating performance reports.
+
+## 🐳 Docker Integration & Reproducible Builds
+To ensure a consistent development environment across different machines (Ubuntu, Debian, etc.), the project is containerized using Docker. This eliminates "it works on my machine" issues by freezing dependencies like OpenCV 4.x and Webots libraries.
+
+
+
+## 🛰️ Advanced Stae Esimtation, Localization & Sensor Fusion (Kalman Branch)
 Beyond line following, the system implements a robust state estimator to track the robot's absolute trajectory ($X, Y, \theta$).
 
+### ⚙️ Numerical Integration: From Euler to Runge-Kutta (RK2)
+
+To transform wheel velocities into a global **$(X, Y, \theta)$** position, the system must integrate the robot's kinematic equations over time. This project compares two methods to evaluate their impact on localization drift:
+
+#### 1. Euler Method (First-Order)
+The simplest approach, but prone to **integration drift**, especially at high angular velocities. It assumes the velocity remains constant during the entire time step $dt$, leading to "staircase" approximation errors.
+> $$x_{n+1} = x_n + f(t_n, x_n) \cdot dt$$
+
+#### 2. RK2 / Midpoint Method (Second-Order)
+Implemented in this branch to significantly reduce truncation errors. Instead of using only the initial state, it calculates an **intermediate velocity** at $dt/2$ to better estimate the robot's trajectory, particularly during sharp turns.
+> $$k_1 = f(t_n, x_n)$$
+> $$x_{n+1} = x_n + f(t_n + \frac{dt}{2}, x_n + \frac{dt}{2}k_1) \cdot dt$$
+
+---
+
+### 🚀 The Result
+Even at high speeds (**5.8 rad/s**), the position estimate remains stable. The **RK2 integration** allows the filter to follow the star-shaped circuit's sharp corners accurately, eliminating the typical "dynamic lag" and trajectory cutting observed with the basic Euler method.
+
 ### 🛠️ The Estimator Pipeline
-To mitigate GPS noise ($accuracy = 0.05m$) and Odometry drift, I implemented a **1st Order Complementary Filter** enhanced by **Runge-Kutta 4th Order (RK4) integration**:
+To mitigate GPS noise ($accuracy = 0.05m$) and Odometry drift, I implemented a **1st Order Complementary Filter** enhanced by **Runge-Kutta 2nd Order (RK2) integration**:
 
 * **Prediction Step:** Uses wheel encoders and compass data to project the state forward.
 * **Correction Step:** Blends the prediction with GPS absolute coordinates using a tuned gain $\alpha = 0.98$.
@@ -59,17 +90,6 @@ To validate the filter's optimality, the error was compared against the **Cramé
 | **Final Filter RMSE** | **0.1255 m** | High efficiency (only 2x the physical limit) |
 
 > **Insight:** The residual error (gap between RMSE and CRLB) is primarily due to the "dynamic lag" during sharp turns in the star-shaped circuit, a known trade-off of static gain filters.
-
-## 📁 Project Structure
-- `controllers/EPuckLineFollowerOOP/`:
-    - `LineDetector.hpp/cpp` & `PID.hpp/cpp`: Modular vision and control logic.
-    - `DataLogger.hpp/cpp`: CSV Telemetry system.
-    - `RobotState.hpp`: Data synchronization.
-    - `EPuckLineFollowerOOP.cpp`: Main entry point.
-- `analysis/`: Python pipeline for generating performance reports.
-
-## 🐳 Docker Integration & Reproducible Builds
-To ensure a consistent development environment across different machines (Ubuntu, Debian, etc.), the project is containerized using Docker. This eliminates "it works on my machine" issues by freezing dependencies like OpenCV 4.x and Webots libraries.
 
 # Quick Start
 
